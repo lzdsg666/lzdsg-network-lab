@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LZDSG Network Lab</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  font-family: Arial, "Microsoft YaHei", sans-serif;
+  color: #fff;
+  background:
+    radial-gradient(circle at 15% 15%, #243b80 0, transparent 32%),
+    radial-gradient(circle at 85% 80%, #12435b 0, transparent 35%),
+    #070a11;
+  padding: 30px 18px;
+}
+
+.container {
+  max-width: 1050px;
+  margin: auto;
+}
+
+.hero {
+  text-align: center;
+  padding: 45px 10px 35px;
+}
+
+.hero h1 {
+  font-size: 44px;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.hero p {
+  color: #94a2b8;
+}
+
+.card {
+  background: rgba(255,255,255,.055);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 22px;
+  backdrop-filter: blur(16px);
+}
+
+.card h2 {
+  font-size: 20px;
+  margin-bottom: 18px;
+}
+
+.network {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.info {
+  background: rgba(0,0,0,.22);
+  padding: 18px;
+  border-radius: 14px;
+}
+
+.info span {
+  display: block;
+  color: #8996aa;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.info strong {
+  display: block;
+  font-size: 15px;
+  word-break: break-all;
+}
+
+.copy {
+  margin-top: 10px;
+  width: 100%;
+  padding: 8px;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(255,255,255,.08);
+  color: white;
+  cursor: pointer;
+}
+
+.tools {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.tool {
+  padding: 20px 10px;
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.045);
+  color: white;
+  cursor: pointer;
+  transition: .2s;
+  text-align: center;
+}
+
+.tool:hover {
+  transform: translateY(-3px);
+  background: rgba(255,255,255,.11);
+}
+
+.tool .icon {
+  font-size: 27px;
+  margin-bottom: 9px;
+}
+
+.tool small {
+  display: block;
+  color: #8d99ad;
+  margin-top: 5px;
+}
+
+.panel {
+  display: none;
+}
+
+.panel.active {
+  display: block;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(0,0,0,.3);
+  color: white;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.action {
+  padding: 11px 17px;
+  border: 0;
+  border-radius: 9px;
+  background: #3b82f6;
+  color: white;
+  cursor: pointer;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.action.secondary {
+  background: rgba(255,255,255,.1);
+}
+
+.result {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(0,0,0,.25);
+  color: #b9c5d7;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+footer {
+  text-align: center;
+  color: #657287;
+  font-size: 13px;
+  padding: 15px 0 30px;
+}
+
+@media (max-width: 750px) {
+  .tools {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .network {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <section class="hero">
+    <h1>LZDSG Network Lab</h1>
+    <p>Network tools & experiments</p>
+  </section>
+
+  <!-- 网络信息 -->
+  <section class="card">
+
+    <h2>🌐 Your Network</h2>
+
+    <div class="network">
+
+      <div class="info">
+        <span>IPv4</span>
+        <strong id="ipv4">检测中...</strong>
+        <button class="copy" onclick="copyText('ipv4')">
+          复制 IPv4
+        </button>
+      </div>
+
+      <div class="info">
+        <span>IPv6</span>
+        <strong id="ipv6">检测中...</strong>
+        <button class="copy" onclick="copyText('ipv6')">
+          复制 IPv6
+        </button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- 工具 -->
+  <section class="card">
+
+    <h2>🛠️ Tools</h2>
+
+    <div class="tools">
+
+      <button class="tool" onclick="showPanel('dns')">
+        <div class="icon">🔍</div>
+        DNS 查询
+        <small>DNS over HTTPS</small>
+      </button>
+
+      <button class="tool" onclick="showPanel('url')">
+        <div class="icon">🔗</div>
+        URL 工具
+        <small>编码 / 解码</small>
+      </button>
+
+      <button class="tool" onclick="showPanel('base64')">
+        <div class="icon">🔐</div>
+        Base64
+        <small>编码 / 解码</small>
+      </button>
+
+      <button class="tool" onclick="showPanel('json')">
+        <div class="icon">🧾</div>
+        JSON 工具
+        <small>格式化 / 压缩</small>
+      </button>
+
+      <button class="tool" onclick="showPanel('uuid')">
+        <div class="icon">🔢</div>
+        UUID
+        <small>随机生成</small>
+      </button>
+
+      <button class="tool" onclick="showPanel('password')">
+        <div class="icon">🔑</div>
+        密码生成
+        <small>随机密码</small>
+      </button>
+
+      <button class="tool" onclick="showPanel('time')">
+        <div class="icon">🕐</div>
+        时间
+        <small>当前时间</small>
+      </button>
+
+      <button class="tool" onclick="showPanel('status')">
+        <div class="icon">📡</div>
+        网站检测
+        <small>HTTP 状态</small>
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- DNS -->
+  <section id="dns" class="card panel">
+    <h2>🔍 DNS 查询</h2>
+
+    <input id="dnsDomain"
+           placeholder="输入域名，例如 example.com">
+
+    <select id="dnsType">
+      <option value="A">A</option>
+      <option value="AAAA">AAAA</option>
+      <option value="CNAME">CNAME</option>
+      <option value="MX">MX</option>
+      <option value="TXT">TXT</option>
+      <option value="NS">NS</option>
+    </select>
+
+    <button class="action" onclick="dnsQuery()">
+      查询
+    </button>
+
+    <div id="dnsResult" class="result">
+      等待查询...
+    </div>
+  </section>
+
+  <!-- URL -->
+  <section id="url" class="card panel">
+    <h2>🔗 URL 编码 / 解码</h2>
+
+    <textarea id="urlText"
+      placeholder="输入需要处理的文字或 URL"></textarea>
+
+    <button class="action" onclick="urlEncode()">
+      URL 编码
+    </button>
+
+    <button class="action" onclick="urlDecode()">
+      URL 解码
+    </button>
+
+    <div id="urlResult" class="result">
+      结果将在这里显示
+    </div>
+  </section>
+
+  <!-- Base64 -->
+  <section id="base64" class="card panel">
+    <h2>🔐 Base64</h2>
+
+    <textarea id="baseText"
+      placeholder="输入文本"></textarea>
+
+    <button class="action" onclick="base64Encode()">
+      编码
+    </button>
+
+    <button class="action" onclick="base64Decode()">
+      解码
+    </button>
+
+    <div id="baseResult" class="result">
+      结果将在这里显示
+    </div>
+  </section>
+
+  <!-- JSON -->
+  <section id="json" class="card panel">
+    <h2>🧾 JSON 工具</h2>
+
+    <textarea id="jsonText"
+      placeholder='例如：{"name":"LZDSG","lab":true}'></textarea>
+
+    <button class="action" onclick="jsonFormat()">
+      格式化
+    </button>
+
+    <button class="action" onclick="jsonMinify()">
+      压缩
+    </button>
+
+    <div id="jsonResult" class="result">
+      结果将在这里显示
+    </div>
+  </section>
+
+  <!-- UUID -->
+  <section id="uuid" class="card panel">
+    <h2>🔢 UUID Generator</h2>
+
+    <button class="action" onclick="generateUUID()">
+      生成 UUID
+    </button>
+
+    <div id="uuidResult" class="result">
+      点击生成
+    </div>
+  </section>
+
+  <!-- 密码 -->
+  <section id="password" class="card panel">
+    <h2>🔑 随机密码</h2>
+
+    <input id="passwordLength"
+           type="number"
+           value="20"
+           min="4"
+           max="128">
+
+    <button class="action" onclick="generatePassword()">
+      生成密码
+    </button>
+
+    <div id="passwordResult" class="result">
+      点击生成
+    </div>
+  </section>
+
+  <!-- 时间 -->
+  <section id="time" class="card panel">
+    <h2>🕐 Current Time</h2>
+
+    <div id="timeResult" class="result">
+      —
+    </div>
+  </section>
+
+  <!-- 网站检测 -->
+  <section id="status" class="card panel">
+    <h2>📡 网站状态检测</h2>
+
+    <input id="statusUrl"
+           placeholder="https://example.com">
+
+    <button class="action" onclick="checkWebsite()">
+      检测
+    </button>
+
+    <div id="statusResult" class="result">
+      等待检测...
+    </div>
+  </section>
+
+  <footer>
+    LZDSG Network Lab · 2026
+  </footer>
+
+</div>
+
+<script>
+
+/* =========================
+   IP
+========================= */
+
+fetch("https://api.ipify.org?format=json")
+.then(r => r.json())
+.then(data => {
+  document.getElementById("ipv4").textContent = data.ip;
+})
+.catch(() => {
+  document.getElementById("ipv4").textContent = "Unavailable";
+});
+
+fetch("https://api64.ipify.org?format=json")
+.then(r => r.json())
+.then(data => {
+  document.getElementById("ipv6").textContent = data.ip;
+})
+.catch(() => {
+  document.getElementById("ipv6").textContent = "Unavailable";
+});
+
+
+/* =========================
+   Panel
+========================= */
+
+function showPanel(id) {
+
+  document.querySelectorAll(".panel")
+    .forEach(p => p.classList.remove("active"));
+
+  document.getElementById(id)
+    .classList.add("active");
+
+  document.getElementById(id)
+    .scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+  if (id === "time") {
+    updateTime();
+  }
+}
+
+
+/* =========================
+   Copy
+========================= */
+
+function copyText(id) {
+
+  const text =
+    document.getElementById(id).textContent;
+
+  navigator.clipboard.writeText(text);
+
+  alert("已复制");
+}
+
+
+/* =========================
+   DNS
+========================= */
+
+async function dnsQuery() {
+
+  const domain =
+    document.getElementById("dnsDomain").value.trim();
+
+  const type =
+    document.getElementById("dnsType").value;
+
+  const result =
+    document.getElementById("dnsResult");
+
+  if (!domain) {
+    result.textContent = "请输入域名";
+    return;
+  }
+
+  result.textContent = "查询中...";
+
+  try {
+
+    const url =
+      `https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(domain)}&type=${type}`;
+
+    const response =
+      await fetch(url, {
+        headers: {
+          "accept": "application/dns-json"
+        }
+      });
+
+    const data = await response.json();
+
+    if (!data.Answer) {
+      result.textContent = "没有找到记录";
+      return;
+    }
+
+    result.textContent =
+      data.Answer
+        .map(x => x.data)
+        .join("\n");
+
+  } catch (e) {
+
+    result.textContent =
+      "查询失败：" + e.message;
+
+  }
+}
+
+
+/* =========================
+   URL
+========================= */
+
+function urlEncode() {
+
+  const text =
+    document.getElementById("urlText").value;
+
+  document.getElementById("urlResult")
+    .textContent =
+    encodeURIComponent(text);
+}
+
+function urlDecode() {
+
+  const text =
+    document.getElementById("urlText").value;
+
+  try {
+
+    document.getElementById("urlResult")
+      .textContent =
+      decodeURIComponent(text);
+
+  } catch {
+
+    document.getElementById("urlResult")
+      .textContent =
+      "无法解码";
+
+  }
+}
+
+
+/* =========================
+   Base64
+========================= */
+
+function base64Encode() {
+
+  const text =
+    document.getElementById("baseText").value;
+
+  try {
+
+    const bytes =
+      new TextEncoder().encode(text);
+
+    let binary = "";
+
+    bytes.forEach(b =>
+      binary += String.fromCharCode(b)
+    );
+
+    document.getElementById("baseResult")
+      .textContent =
+      btoa(binary);
+
+  } catch {
+
+    document.getElementById("baseResult")
+      .textContent =
+      "编码失败";
+
+  }
+}
+
+function base64Decode() {
+
+  const text =
+    document.getElementById("baseText").value;
+
+  try {
+
+    const binary =
+      atob(text);
+
+    const bytes =
+      Uint8Array.from(
+        binary,
+        c => c.charCodeAt(0)
+      );
+
+    document.getElementById("baseResult")
+      .textContent =
+      new TextDecoder().decode(bytes);
+
+  } catch {
+
+    document.getElementById("baseResult")
+      .textContent =
+      "Base64 格式错误";
+
+  }
+}
+
+
+/* =========================
+   JSON
+========================= */
+
+function jsonFormat() {
+
+  const text =
+    document.getElementById("jsonText").value;
+
+  try {
+
+    const obj = JSON.parse(text);
+
+    document.getElementById("jsonResult")
+      .textContent =
+      JSON.stringify(obj, null, 2);
+
+  } catch (e) {
+
+    document.getElementById("jsonResult")
+      .textContent =
+      "JSON 错误：" + e.message;
+
+  }
+}
+
+function jsonMinify() {
+
+  const text =
+    document.getElementById("jsonText").value;
+
+  try {
+
+    const obj = JSON.parse(text);
+
+    document.getElementById("jsonResult")
+      .textContent =
+      JSON.stringify(obj);
+
+  } catch (e) {
+
+    document.getElementById("jsonResult")
+      .textContent =
+      "JSON 错误：" + e.message;
+
+  }
+}
+
+
+/* =========================
+   UUID
+========================= */
+
+function generateUUID() {
+
+  const uuid =
+    crypto.randomUUID();
+
+  document.getElementById("uuidResult")
+    .textContent = uuid;
+}
+
+
+/* =========================
+   Password
+========================= */
+
+function generatePassword() {
+
+  const length =
+    Number(
+      document.getElementById("passwordLength").value
+    );
+
+  const chars =
+    "ABCDEFGHJKLMNPQRSTUVWXYZ" +
+    "abcdefghijkmnopqrstuvwxyz" +
+    "23456789!@#$%^&*_-+=";
+
+  let result = "";
+
+  const array =
+    new Uint32Array(length);
+
+  crypto.getRandomValues(array);
+
+  for (let i = 0; i < length; i++) {
+
+    result +=
+      chars[array[i] % chars.length];
+
+  }
+
+  document.getElementById("passwordResult")
+    .textContent = result;
+}
+
+
+/* =========================
+   Time
+========================= */
+
+function updateTime() {
+
+  document.getElementById("timeResult")
+    .textContent =
+    new Date().toLocaleString(
+      "zh-CN",
+      {
+        dateStyle: "full",
+        timeStyle: "medium"
+      }
+    );
+}
+
+setInterval(updateTime, 1000);
+
+
+/* =========================
+   Website status
+========================= */
+
+async function checkWebsite() {
+
+  const input =
+    document.getElementById("statusUrl");
+
+  const result =
+    document.getElementById("statusResult");
+
+  let url = input.value.trim();
+
+  if (!url) {
+
+    result.textContent =
+      "请输入网址";
+
+    return;
+  }
+
+  if (!/^https?:\/\//i.test(url)) {
+    url = "https://" + url;
+  }
+
+  result.textContent =
+    "检测中...";
+
+  const start = performance.now();
+
+  try {
+
+    await fetch(url, {
+      method: "HEAD",
+      mode: "no-cors",
+      cache: "no-store"
+    });
+
+    const ms =
+      Math.round(performance.now() - start);
+
+    result.textContent =
+      `请求已发出\n耗时：${ms} ms\n\n注意：由于浏览器 CORS 限制，纯前端无法可靠读取目标网站 HTTP 状态码。`;
+
+  } catch (e) {
+
+    result.textContent =
+      "请求失败：" + e.message;
+
+  }
+}
+
+</script>
+
+</body>
+</html>
