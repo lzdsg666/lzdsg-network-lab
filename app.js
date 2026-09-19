@@ -352,6 +352,15 @@ window.addEventListener(
 
 function openTool(type){
 
+    /* 先让被点击的卡片退出 hover / GPU 合成 */
+    document.body.classList.add("modal-open");
+
+    document.querySelectorAll(".tool").forEach(tool => {
+        tool.style.transform = "none";
+        tool.style.transition = "none";
+        tool.style.willChange = "auto";
+    });
+
     $("modal").classList.add("show");
 
     const tools={
