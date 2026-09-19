@@ -653,3 +653,245 @@ body.light .modal-box{
         gap:8px;
     }
 }
+/* =========================================================
+   LIQUID GLASS EFFECT
+   保持原模板，只增加液态玻璃
+========================================================= */
+
+body.effects-on .sidebar,
+body.effects-on .status,
+body.effects-on .hero,
+body.effects-on .tool,
+body.effects-on .modal-box,
+body.effects-on .result,
+body.effects-on .field input,
+body.effects-on .field textarea,
+body.effects-on .field select,
+body.effects-on .close,
+body.effects-on .switch {
+    backdrop-filter: blur(22px) saturate(145%);
+    -webkit-backdrop-filter: blur(22px) saturate(145%);
+}
+
+/* 侧边栏 */
+body.effects-on .sidebar {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(10,35,70,.72),
+            rgba(5,10,30,.58)
+        );
+    box-shadow:
+        inset -1px 0 rgba(255,255,255,.08),
+        10px 0 40px rgba(0,100,255,.08);
+}
+
+/* 顶部状态 */
+body.effects-on .status {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.09),
+            rgba(255,255,255,.025)
+        );
+    box-shadow:
+        inset 0 1px rgba(255,255,255,.12),
+        0 8px 30px rgba(0,100,255,.08);
+}
+
+/* Hero 液态玻璃 */
+body.effects-on .hero {
+    background:
+        radial-gradient(
+            circle at var(--glass-x,50%) var(--glass-y,20%),
+            rgba(255,255,255,.12),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 20% 10%,
+            rgba(0,220,255,.16),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            rgba(10,45,85,.62),
+            rgba(25,8,65,.55)
+        );
+
+    border-color: rgba(150,220,255,.28);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.16),
+        inset 0 -1px 0 rgba(0,180,255,.08),
+        0 20px 60px rgba(0,80,180,.16);
+}
+
+/* Hero 上面的玻璃高光 */
+body.effects-on .hero::after {
+    content:"";
+    position:absolute;
+    inset:-50%;
+    pointer-events:none;
+
+    background:
+        linear-gradient(
+            115deg,
+            transparent 40%,
+            rgba(255,255,255,.09) 48%,
+            rgba(255,255,255,.025) 52%,
+            transparent 60%
+        );
+
+    transform:translateX(-30%) rotate(8deg);
+    animation:liquidGlassShine 8s ease-in-out infinite;
+}
+
+/* 工具卡片 */
+body.effects-on .tool {
+    background:
+        radial-gradient(
+            circle at var(--glass-x,50%) var(--glass-y,20%),
+            rgba(255,255,255,.10),
+            transparent 38%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(15,45,80,.68),
+            rgba(5,13,34,.58)
+        );
+
+    border-color:rgba(130,210,255,.23);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.10),
+        inset 0 -1px 0 rgba(0,160,255,.06),
+        0 10px 35px rgba(0,60,140,.12);
+}
+
+/* 卡片顶部细微高光 */
+body.effects-on .tool::before {
+    content:"";
+    position:absolute;
+    top:0;
+    left:10%;
+    right:10%;
+    height:1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.30),
+            transparent
+        );
+
+    opacity:.65;
+}
+
+/* 鼠标悬停时更像液体 */
+body.effects-on .tool:hover {
+    transform:translateY(-5px) scale(1.01);
+
+    border-color:rgba(80,220,255,.55);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.16),
+        0 15px 45px rgba(0,130,255,.18),
+        0 0 25px rgba(0,200,255,.08);
+}
+
+/* 弹窗 */
+body.effects-on .modal-box {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(8,30,65,.78),
+            rgba(15,5,50,.74)
+        );
+
+    border-color:rgba(120,210,255,.30);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.14),
+        0 25px 80px rgba(0,70,160,.25);
+}
+
+/* 输入框 */
+body.effects-on .field input,
+body.effects-on .field textarea,
+body.effects-on .field select,
+body.effects-on .result {
+    background:rgba(5,20,45,.48);
+
+    border-color:rgba(100,190,255,.25);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+/* 开关本身也玻璃化 */
+body.effects-on .switch {
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        0 4px 15px rgba(0,100,255,.12);
+}
+
+/* 液态高光动画 */
+@keyframes liquidGlassShine {
+
+    0% {
+        transform:translateX(-55%) rotate(8deg);
+        opacity:0;
+    }
+
+    20% {
+        opacity:.45;
+    }
+
+    50% {
+        opacity:.25;
+    }
+
+    80% {
+        opacity:.4;
+    }
+
+    100% {
+        transform:translateX(55%) rotate(8deg);
+        opacity:0;
+    }
+}
+
+/* =========================================================
+   特效关闭后恢复原本视觉
+========================================================= */
+
+body.effects-off .sidebar,
+body.effects-off .status,
+body.effects-off .hero,
+body.effects-off .tool,
+body.effects-off .modal-box,
+body.effects-off .result,
+body.effects-off .field input,
+body.effects-off .field textarea,
+body.effects-off .field select {
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+}
+
+/* 关闭动态玻璃动画 */
+body.effects-off .hero::after {
+    animation:none;
+    display:none;
+}
+
+/* 减少动画 */
+@media (prefers-reduced-motion: reduce) {
+
+    body.effects-on .hero::after,
+    body.effects-on .hero::before,
+    body.effects-on .hero {
+        animation:none !important;
+    }
+
+}
