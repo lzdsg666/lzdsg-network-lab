@@ -1334,3 +1334,111 @@ document.addEventListener("DOMContentLoaded",()=>{
     );
 
 });
+/* =========================================================
+   LIQUID GLASS
+   鼠标移动时改变玻璃高光位置
+========================================================= */
+
+const glassElements = document.querySelectorAll(
+    ".hero, .tool, .status, .sidebar, .modal-box"
+);
+
+document.addEventListener("pointermove", e => {
+
+    if (!settings.effects) return;
+
+    const x = `${(e.clientX / window.innerWidth) * 100}%`;
+    const y = `${(e.clientY / window.innerHeight) * 100}%`;
+
+    glassElements.forEach(el => {
+        el.style.setProperty("--glass-x", x);
+        el.style.setProperty("--glass-y", y);
+    });
+
+});
+
+
+/* =========================================================
+   特效状态初始化
+========================================================= */
+
+document.body.classList.toggle(
+    "effects-on",
+    settings.effects
+);
+
+document.body.classList.toggle(
+    "effects-off",
+    !settings.effects
+);
+
+setSwitch(
+    "effectsSwitch",
+    settings.effects
+);
+
+
+/* =========================================================
+   保存总特效开关
+========================================================= */
+
+const originalToggleSetting = toggleSetting;
+
+toggleSetting = function(type) {
+
+    originalToggleSetting(type);
+
+    if (type === "effects") {
+
+        localStorage.setItem(
+            "lzdsg-effects",
+            settings.effects ? "on" : "off"
+        );
+
+    }
+
+};
+
+
+/* =========================================================
+   恢复上次的特效状态
+========================================================= */
+
+const savedEffects =
+    localStorage.getItem("lzdsg-effects");
+
+if (savedEffects !== null) {
+
+    settings.effects =
+        savedEffects !== "off";
+
+    document.body.classList.toggle(
+        "effects-on",
+        settings.effects
+    );
+
+    document.body.classList.toggle(
+        "effects-off",
+        !settings.effects
+    );
+
+    setSwitch(
+        "effectsSwitch",
+        settings.effects
+    );
+
+    if ($("cursorGlow")) {
+
+        $("cursorGlow").style.display =
+            settings.effects &&
+            settings.cursor
+                ? ""
+                : "none";
+
+    }
+
+    particleEnabled =
+        settings.effects &&
+        settings.particle;
+
+}
