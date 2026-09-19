@@ -895,3 +895,113 @@ body.effects-off .hero::after {
     }
 
 }
+/* =========================================================
+   MODAL STACKING FIX
+   修复液态玻璃/遮罩覆盖弹窗主体的问题
+========================================================= */
+
+/* 弹窗整体永远位于页面最上层 */
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000 !important;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    /* 不让 backdrop-filter 自己参与弹窗内容的层叠 */
+    background: transparent;
+
+    isolation: isolate;
+}
+
+/* 单独创建遮罩层 */
+.modal::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: rgba(0, 0, 0, .68);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+/* 弹窗主体必须在遮罩之上 */
+.modal-box {
+    position: relative;
+    z-index: 1 !important;
+
+    pointer-events: auto;
+
+    width: min(720px, 100%);
+    max-height: 90vh;
+    overflow: auto;
+
+    border: 1px solid rgba(0, 200, 255, .4);
+    border-radius: 22px;
+
+    background: rgba(3, 15, 38, .96);
+
+    box-shadow:
+        0 0 80px rgba(0, 130, 255, .18),
+        inset 0 1px 0 rgba(255, 255, 255, .12);
+
+    padding: 25px;
+}
+
+/* 液态玻璃开启时，主体依然必须高于遮罩 */
+body.effects-on .modal-box {
+    position: relative;
+    z-index: 1 !important;
+
+    pointer-events: auto;
+}
+
+/* 弹窗内部所有交互元素确保可以点击 */
+.modal-box button,
+.modal-box input,
+.modal-box textarea,
+.modal-box select,
+.modal-box a {
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
+}
+
+/* 点击粒子不能盖住弹窗 */
+.burst {
+    z-index: 1500 !important;
+}
+
+/* Toast 继续保持最高 */
+#toast {
+    z-index: 3000 !important;
+}
+
+/* 关闭按钮 */
+.modal-box .close {
+    position: relative;
+    z-index: 3;
+    pointer-events: auto;
+}
+
+/* 手机端 */
+@media (max-width: 600px) {
+
+    .modal {
+        padding: 14px;
+    }
+
+    .modal-box {
+        max-height: 92vh;
+        width: 100%;
+    }
+}
