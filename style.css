@@ -432,37 +432,225 @@ body.light .tool{
     font-size:11px;
 }
 
-.modal{
-    position:fixed;
-    inset:0;
-    z-index:100;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    background:rgba(0,0,0,.68);
-    backdrop-filter:blur(8px);
+/* =========================================================
+   MODAL FIX
+   弹窗和遮罩彻底分层
+========================================================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    /*
+     * 关键：
+     * modal 本身不再使用 backdrop-filter
+     */
+    background: transparent;
+
+    /*
+     * 创建独立层叠上下文
+     */
+    isolation: isolate;
+
+    /*
+     * 弹窗整体高于页面所有普通元素
+     */
+    z-index: 2000 !important;
 }
 
-.modal.show{
-    display:flex;
+.modal.show {
+    display: flex;
 }
 
-.modal-box{
-    width:min(720px,100%);
-    max-height:90vh;
-    overflow:auto;
-    border:1px solid rgba(0,200,255,.4);
-    border-radius:22px;
-    background:rgba(3,15,38,.96);
-    box-shadow:0 0 80px rgba(0,130,255,.18);
-    padding:25px;
+/*
+ * 独立遮罩层
+ *
+ * 它只能负责：
+ * 1. 黑色遮罩
+ * 2. 背景模糊
+ *
+ * 绝对不能盖住 modal-box
+ */
+.modal::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background: rgba(0, 0, 0, .68);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    /*
+     * 遮罩层
+     */
+    z-index: 0;
+
+    /*
+     * 最重要：
+     * 遮罩绝对不能接收点击
+     */
+    pointer-events: none;
 }
 
-body.light .modal-box{
-    background:#f5faff;
+
+/*
+ * 弹窗主体
+ */
+.modal-box {
+    position: relative;
+
+    /*
+     * 明确高于 ::before
+     */
+    z-index: 10 !important;
+
+    /*
+     * 防止任何东西覆盖它
+     */
+    pointer-events: auto;
+
+    width: min(720px, 100%);
+    max-height: 90vh;
+
+    overflow: auto;
+
+    border: 1px solid rgba(0, 200, 255, .4);
+
+    border-radius: 22px;
+
+    /*
+     * 不要让弹窗主体再使用 backdrop-filter
+     *
+     * 这是这次修复的关键之一。
+     */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    /*
+     * 使用接近不透明的玻璃背景
+     */
+    background:
+        linear-gradient(
+            135deg,
+            rgba(8, 30, 65, .985),
+            rgba(12, 8, 40, .985)
+        );
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .14),
+        0 0 80px rgba(0, 130, 255, .18);
+
+    padding: 25px;
 }
 
+
+/*
+ * 液态玻璃开启时
+ *
+ * 弹窗依然保持独立、不透明
+ */
+body.effects-on .modal-box {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(8, 30, 65, .985),
+            rgba(15, 5, 50, .985)
+        );
+
+    border-color:
+        rgba(120, 210, 255, .38);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .14),
+        0 25px 80px rgba(0, 70, 160, .28);
+}
+
+
+/*
+ * 浅色模式
+ */
+body.light .modal-box {
+    background: rgba(245, 250, 255, .985);
+}
+
+
+/*
+ * 弹窗里面所有交互元素
+ */
+.modal-box button,
+.modal-box input,
+.modal-box textarea,
+.modal-box select,
+.modal-box a {
+    position: relative;
+    z-index: 20;
+
+    pointer-events: auto;
+}
+
+
+/*
+ * 关闭按钮
+ */
+.modal-box .close {
+    position: relative;
+    z-index: 30;
+
+    pointer-events: auto;
+}
+
+
+/*
+ * 点击粒子永远不能盖住弹窗
+ */
+.burst {
+    z-index: 1500 !important;
+}
+
+
+/*
+ * Toast 比弹窗更高
+ */
+#toast {
+    z-index: 3000 !important;
+}
+
+
+/*
+ * 手机端
+ */
+@media (max-width: 600px) {
+
+    .modal {
+        padding: 14px;
+    }
+
+    .modal-box {
+        width: 100%;
+        max-height: 92vh;
+
+        /*
+         * 手机端进一步避免透明叠加
+         */
+        background:
+            linear-gradient(
+                135deg,
+                rgba(8, 30, 65, .99),
+                rgba(12, 8, 40, .99)
+            );
+    }
+}
 .modal-head{
     display:flex;
     justify-content:space-between;
