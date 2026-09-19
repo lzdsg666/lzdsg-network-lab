@@ -124,18 +124,28 @@ function toggleTheme(){
    鼠标光效
 ========================= */
 
-document.addEventListener("pointermove",e=>{
+document.addEventListener("pointerdown", e => {
 
-    if(
+    if (
         !settings.effects ||
-        !settings.cursor
+        !settings.click
     ) return;
 
-    $("cursorGlow").style.left =
-        e.clientX+"px";
+    /*
+     * 弹窗打开时，不在弹窗内部生成点击粒子
+     * 避免粒子层影响弹窗视觉和交互
+     */
+    if (
+        e.target.closest &&
+        e.target.closest(".modal-box")
+    ) {
+        return;
+    }
 
-    $("cursorGlow").style.top =
-        e.clientY+"px";
+    createBurst(
+        e.clientX,
+        e.clientY
+    );
 });
 
 
