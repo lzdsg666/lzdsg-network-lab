@@ -1193,3 +1193,39 @@ body.effects-on .modal-box {
         width: 100%;
     }
 }
+/* =========================================================
+   修复：打开工具时卡片 GPU 残影
+========================================================= */
+
+body.modal-open .app {
+    pointer-events: none !important;
+}
+
+body.modal-open .tool,
+body.modal-open .tool:hover {
+    transform: none !important;
+
+    transition: none !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.06) !important;
+
+    border-color: rgba(130,210,255,.23) !important;
+}
+
+/* 强制卡片不要继续建立动画合成层 */
+body.modal-open .tool {
+    will-change: auto !important;
+}
+
+/* 弹窗保持最高层 */
+.modal {
+    z-index: 9999 !important;
+}
+
+.modal-box {
+    z-index: 10000 !important;
+}
