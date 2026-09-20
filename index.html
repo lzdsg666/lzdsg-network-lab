@@ -1,311 +1,236 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="description" content="LZDSG Network Lab - Network & Developer Tools">
-<title>LZDSG Network Lab</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080c18">
+  <meta name="description" content="LZDSG Network Lab V3">
+  <title>LZDSG Network Lab V3</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
-<body class="effects-on">
+<body>
+<header class="topbar">
+  <a class="brand" href="#home">
+    <span class="brand-mark">L</span>
+    <span>
+      LZDSG <b>NETWORK LAB</b>
+      <small>V3</small>
+    </span>
+  </a>
 
-<canvas id="particles"></canvas>
-<div id="cursorGlow"></div>
+  <nav>
+    <a href="#home">首页</a>
+    <a href="#tools">工具</a>
+    <a href="#play">Playground</a>
+    <a href="#about">关于</a>
+  </nav>
 
-<div class="app">
+  <div class="top-actions">
+    <button id="themeBtn" class="icon-btn" title="切换主题">☼</button>
+    <button id="fxBtn" class="icon-btn" title="低特效模式">✦</button>
+  </div>
+</header>
 
-<aside class="sidebar">
+<main id="home">
 
-    <div class="logo">
-        <div class="logo-main">LZDSG</div>
-        <div class="logo-sub">NETWORK LAB</div>
+<section class="hero container">
+  <div class="hero-copy">
+    <div class="eyebrow">PERSONAL TOOL LAB · V3</div>
+
+    <h1>
+      把网络工具<br>
+      <span>做得更好玩。</span>
+    </h1>
+
+    <p>
+      轻量、实用、可玩。
+      网络检测、开发工具、实用工具和小游戏集中在一个实验室里。
+    </p>
+
+    <div class="hero-actions">
+      <button id="randomBtn" class="btn primary">🎲 随机玩一个</button>
+      <a class="btn ghost" href="#tools">浏览工具</a>
+    </div>
+  </div>
+
+  <div class="hero-panel">
+    <div class="panel-head">
+      <span>LAB STATUS</span>
+      <i></i>
+      <b>ONLINE</b>
     </div>
 
-    <nav class="nav">
-        <button class="active" onclick="scrollToTop()">🏠 <span>首页</span></button>
-        <button onclick="scrollToSection('network')">🌐 <span>网络工具</span></button>
-        <button onclick="scrollToSection('developer')">🧩 <span>开发工具</span></button>
-        <button onclick="scrollToSection('utility')">🛠️ <span>实用工具</span></button>
-    </nav>
+    <div class="terminal">
+      <div>$ lzdsg --status</div>
+      <div class="ok">✓ tools loaded</div>
+      <div class="ok">✓ local save enabled</div>
+      <div class="muted">→ progress stored locally</div>
+      <div class="cursor">_</div>
+    </div>
+  </div>
+</section>
 
-    <div class="settings">
+<section class="container quick">
+  <div class="search-box">
+    <span>⌕</span>
+    <input
+      id="searchInput"
+      placeholder="搜索工具，例如 JSON、IP、Base64…"
+    >
+    <kbd>Ctrl K</kbd>
+  </div>
 
-        <div class="switch-row">
-            <span>✨ 总特效</span>
-            <div class="switch on" id="effectsSwitch"
-                 onclick="toggleSetting('effects')"></div>
-        </div>
+  <div class="challenge" id="challengeCard"></div>
+</section>
 
-        <div class="switch-row">
-            <span>⚡ 点击粒子</span>
-            <div class="switch on" id="clickSwitch"
-                 onclick="toggleSetting('click')"></div>
-        </div>
+<section class="container dashboard">
 
-        <div class="switch-row">
-            <span>🖱️ 光标光效</span>
-            <div class="switch on" id="cursorSwitch"
-                 onclick="toggleSetting('cursor')"></div>
-        </div>
+  <article class="dash-card level-card">
+    <div class="dash-label">LAB LEVEL</div>
 
-        <div class="switch-row">
-            <span>🌌 背景粒子</span>
-            <div class="switch on" id="particleSwitch"
-                 onclick="toggleSetting('particle')"></div>
-        </div>
-
-        <div class="switch-row">
-            <span>🌙 深色模式</span>
-            <div class="switch on" id="themeSwitch"
-                 onclick="toggleTheme()"></div>
-        </div>
-
+    <div class="level-line">
+      <strong id="level">1</strong>
+      <span id="xpText">0 / 100 XP</span>
     </div>
 
-</aside>
-
-<main class="main">
-
-    <div class="topbar">
-        <div class="status">
-            <span class="dot"></span>
-            LZDSG LAB ONLINE
-        </div>
-
-        <div class="status" id="clock">--:--:--</div>
+    <div class="progress">
+      <i id="xpBar"></i>
     </div>
 
-    <section class="hero">
+    <p id="levelHint">使用工具获得 XP</p>
+  </article>
 
-        <div class="hero-content">
+  <article class="dash-card">
+    <div class="dash-label">TODAY</div>
+    <strong id="todayText">0 次操作</strong>
+    <p>今天继续探索实验室</p>
+  </article>
 
-            <div class="hero-tag">NETWORK • DEVELOPER • TOOLS</div>
+  <article class="dash-card">
+    <div class="dash-label">STATS</div>
+    <strong><span id="toolCount">0</span> 工具</strong>
+    <p>
+      <span id="favCount">0</span> 个收藏 ·
+      <span id="achievementCount">0</span> 成就
+    </p>
+  </article>
 
-            <h1>LZDSG NETWORK LAB</h1>
+</section>
 
-            <p>Network & Developer Tools</p>
+<section id="tools" class="container section">
 
-            <div class="hero-desc">
-                让网络更简单 · 让工具更高效
-            </div>
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">TOOLBOX</div>
+      <h2>工具箱</h2>
+    </div>
 
-            <div class="search">
-                <input
-                    id="searchInput"
-                    placeholder="搜索工具，例如：DNS、JSON、Base64..."
-                    oninput="searchTools()"
-                >
-                <button onclick="searchTools()">⌕</button>
-            </div>
+    <span id="resultCount"></span>
+  </div>
 
-        </div>
+  <div id="toolSections"></div>
 
-    </section>
+</section>
 
-    <section class="section" id="network">
+<section class="container section">
 
-        <div class="section-title">
-            <h2>🌐 网络工具</h2>
-            <span>NETWORK TOOLS</span>
-        </div>
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">MEMORY</div>
+      <h2>最近使用</h2>
+    </div>
+  </div>
 
-        <div class="tools-grid">
+  <div id="recentTools" class="tool-grid compact"></div>
 
-            <div class="tool" data-name="IP 查询 IP IPv4 IPv6"
-                 onclick="openTool('ip')">
-                <div class="tool-icon">🌐</div>
-                <h3>IP 查询</h3>
-                <p>查看 IPv4 / IPv6</p>
-                <b>→</b>
-            </div>
+</section>
 
-            <div class="tool" data-name="DNS 查询 域名解析"
-                 onclick="openTool('dns')">
-                <div class="tool-icon">🔎</div>
-                <h3>DNS 查询</h3>
-                <p>查询域名解析记录</p>
-                <b>→</b>
-            </div>
+<section id="play" class="container section">
 
-            <div class="tool" data-name="Ping 延迟 网络测试"
-                 onclick="openTool('ping')">
-                <div class="tool-icon">📡</div>
-                <h3>Ping 测试</h3>
-                <p>测试请求延迟</p>
-                <b>→</b>
-            </div>
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">PLAYGROUND</div>
+      <h2>玩点东西</h2>
+    </div>
 
-            <div class="tool" data-name="HTTP 网站状态"
-                 onclick="openTool('http')">
-                <div class="tool-icon">HTTP</div>
-                <h3>HTTP 检测</h3>
-                <p>检测网站响应</p>
-                <b>→</b>
-            </div>
+    <span>小游戏也能获得 XP</span>
+  </div>
 
-            <div class="tool" data-name="Headers 浏览器请求头"
-                 onclick="openTool('headers')">
-                <div class="tool-icon">📋</div>
-                <h3>Headers</h3>
-                <p>查看浏览器信息</p>
-                <b>→</b>
-            </div>
+  <div class="game-grid">
 
-            <div class="tool" data-name="网络信息"
-                 onclick="openTool('network')">
-                <div class="tool-icon">📊</div>
-                <h3>网络信息</h3>
-                <p>查看连接状态</p>
-                <b>→</b>
-            </div>
+    <button class="game-card" data-game="reaction">
+      <b>⚡ 反应力</b>
+      <span>看准时机点击</span>
+    </button>
 
-        </div>
+    <button class="game-card" data-game="typing">
+      <b>⌨️ 打字挑战</b>
+      <span>尽快输入目标文本</span>
+    </button>
 
-    </section>
+    <button class="game-card" data-game="color">
+      <b>🎨 颜色猎人</b>
+      <span>找到指定颜色</span>
+    </button>
 
-    <section class="section" id="developer">
+    <button class="game-card" data-game="quiz">
+      <b>🌐 网络问答</b>
+      <span>测试你的网络知识</span>
+    </button>
 
-        <div class="section-title">
-            <h2>🧩 开发工具</h2>
-            <span>DEVELOPER TOOLS</span>
-        </div>
+  </div>
 
-        <div class="tools-grid">
+</section>
 
-            <div class="tool" data-name="JSON 格式化 压缩"
-                 onclick="openTool('json')">
-                <div class="tool-icon">{ }</div>
-                <h3>JSON 工具</h3>
-                <p>格式化 / 压缩</p>
-                <b>→</b>
-            </div>
+<section id="about" class="container section about">
 
-            <div class="tool" data-name="Base64 编码 解码"
-                 onclick="openTool('base64')">
-                <div class="tool-icon">B64</div>
-                <h3>Base64</h3>
-                <p>编码 / 解码</p>
-                <b>→</b>
-            </div>
+  <div>
+    <div class="eyebrow">ABOUT</div>
+    <h2>LZDSG Network Lab</h2>
+  </div>
 
-            <div class="tool" data-name="URL 编码 解码"
-                 onclick="openTool('url')">
-                <div class="tool-icon">🔗</div>
-                <h3>URL 编解码</h3>
-                <p>Encode / Decode</p>
-                <b>→</b>
-            </div>
+  <p>
+    一个纯前端个人实验室。
+    工具尽量直接在浏览器运行，收藏、历史、等级和设置保存在本地，
+    不需要注册账号。
+  </p>
 
-            <div class="tool" data-name="JWT Token 解码"
-                 onclick="openTool('jwt')">
-                <div class="tool-icon">🪪</div>
-                <h3>JWT 解码</h3>
-                <p>解析 Token</p>
-                <b>→</b>
-            </div>
-
-            <div class="tool" data-name="Hash SHA256 SHA1"
-                 onclick="openTool('hash')">
-                <div class="tool-icon">#</div>
-                <h3>Hash 计算</h3>
-                <p>SHA-256 / SHA-1</p>
-                <b>→</b>
-            </div>
-
-            <div class="tool" data-name="正则 Regex RegExp"
-                 onclick="openTool('regex')">
-                <div class="tool-icon">.*</div>
-                <h3>正则测试</h3>
-                <p>Regex 在线测试</p>
-                <b>→</b>
-            </div>
-
-        </div>
-
-    </section>
-
-    <section class="section" id="utility">
-
-        <div class="section-title">
-            <h2>🛠️ 实用工具</h2>
-            <span>UTILITY TOOLS</span>
-        </div>
-
-        <div class="tools-grid">
-
-            <div class="tool" data-name="UUID"
-                 onclick="openTool('uuid')">
-                <div class="tool-icon">🆔</div>
-                <h3>UUID 生成</h3>
-                <p>生成随机 UUID</p>
-                <b>→</b>
-            </div>
-
-            <div class="tool" data-name="随机密码 密码"
-                 onclick="openTool('password')">
-                <div class="tool-icon">🔑</div>
-                <h3>随机密码</h3>
-                <p>生成安全密码</p>
-                <b>→</b>
-            </div>
-
-            <div class="tool" data-name="时间戳 Unix 时间"
-                 onclick="openTool('time')">
-                <div class="tool-icon">🕐</div>
-                <h3>时间转换</h3>
-                <p>Unix 时间戳</p>
-                <b>→</b>
-            </div>
-
-            <div class="tool" data-name="二维码 QR"
-                 onclick="openTool('qr')">
-                <div class="tool-icon">▦</div>
-                <h3>二维码</h3>
-                <p>生成 QR Code</p>
-                <b>→</b>
-            </div>
-
-            <div class="tool" data-name="文本 字数统计"
-                 onclick="openTool('text')">
-                <div class="tool-icon">Aa</div>
-                <h3>文本统计</h3>
-                <p>字数 / 行数</p>
-                <b>→</b>
-            </div>
-
-            <div class="tool" data-name="颜色 Color HEX"
-                 onclick="openTool('color')">
-                <div class="tool-icon">🎨</div>
-                <h3>颜色工具</h3>
-                <p>HEX / CSS</p>
-                <b>→</b>
-            </div>
-
-        </div>
-
-    </section>
-
-    <footer class="footer">
-        <span>LZDSG Network Lab v2.0</span>
-        <span>Powered by GitHub Pages · lab.lzdsg.top</span>
-    </footer>
+</section>
 
 </main>
-</div>
 
-<div class="modal" id="modal" onclick="modalBackground(event)">
-    <div class="modal-box">
-        <div class="modal-head">
-            <h2 id="modalTitle">工具</h2>
-            <button class="close" onclick="closeTool()">×</button>
-        </div>
-        <div id="modalContent"></div>
+<footer class="container footer">
+  <span>LZDSG NETWORK LAB · V3</span>
+  <span>Built for experimenting.</span>
+</footer>
+
+<div id="modal" class="modal" aria-hidden="true">
+
+  <div class="modal-backdrop" data-close></div>
+
+  <section class="modal-card">
+
+    <div class="modal-head">
+
+      <div>
+        <div class="eyebrow" id="modalCategory"></div>
+        <h2 id="modalTitle"></h2>
+      </div>
+
+      <button class="close" data-close>×</button>
+
     </div>
+
+    <div id="modalBody"></div>
+
+  </section>
+
 </div>
 
-<div id="toast"></div>
+<div id="toast" class="toast"></div>
 
 <script src="app.js"></script>
+
 </body>
 </html>
