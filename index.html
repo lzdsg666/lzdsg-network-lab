@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#070a12">
   <meta name="description" content="LZDSG Network Lab V4 — personal network tool laboratory">
   <title>LZDSG Network Lab V4</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=4.0.2">
 </head>
 <body>
 <div class="noise"></div>
@@ -92,7 +92,7 @@
   </div>
 </div>
 
-<script src="app.js"></script>
+<script src="app.js?v=4.0.2"></script>
 <script>
 (function(){
   const clock=document.getElementById('labClock'), vp=document.getElementById('viewportStatus');
@@ -119,20 +119,6 @@
 })();
 </script>
 <script>
-(function(){
-  document.querySelectorAll('.filter-chip').forEach(btn=>btn.addEventListener('click',()=>{
-    document.querySelectorAll('.filter-chip').forEach(x=>x.classList.remove('active'));
-    btn.classList.add('active');
-    const mode=btn.dataset.filter;
-    let list=tools;
-    if(mode==='network') list=tools.filter(t=>t.category==='网络');
-    if(mode==='dev') list=tools.filter(t=>t.category==='开发');
-    if(mode==='utility') list=tools.filter(t=>t.category==='实用');
-    if(mode==='favorite') list=tools.filter(t=>state.favorites.includes(t.id));
-    renderTools(list);
-  }));
-})();
-</script><script>
 document.addEventListener('click',e=>{
   if(document.body.classList.contains('lowfx')) return;
   if(!e.target.closest('button,.tool-card,.game-card,.btn')) return;
