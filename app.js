@@ -419,7 +419,7 @@ function applyToolFilter(mode = "all"){
 
   activeFilter = mode;
 
-  $(".filter-chip").forEach(btn => {
+  $$(".filter-chip").forEach(btn => {
     btn.classList.toggle(
       "active",
       btn.dataset.filter === mode
@@ -2640,7 +2640,7 @@ function init(){
 
   renderChallenge();
 
-  $(".filter-chip").forEach(btn => {
+  $$(".filter-chip").forEach(btn => {
     btn.onclick = () => {
       applyToolFilter(btn.dataset.filter);
     };
