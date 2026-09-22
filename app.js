@@ -24,6 +24,7 @@ const defaultState = {
 };
 
 let state = loadState();
+let activeFilter = "all";
 
 const tools = [
 
@@ -391,12 +392,52 @@ function renderTools(list = tools){
   });
 }
 
+function getVisibleTools(){
+
+  if(activeFilter === "network"){
+    return tools.filter(t => t.category === "网络");
+  }
+
+  if(activeFilter === "dev"){
+    return tools.filter(t => t.category === "开发");
+  }
+
+  if(activeFilter === "utility"){
+    return tools.filter(t => t.category === "实用");
+  }
+
+  if(activeFilter === "favorite"){
+    return tools.filter(t =>
+      state.favorites.includes(t.id)
+    );
+  }
+
+  return tools;
+}
+
+function applyToolFilter(mode = "all"){
+
+  activeFilter = mode;
+
+  $(".filter-chip").forEach(btn => {
+    btn.classList.toggle(
+      "active",
+      btn.dataset.filter === mode
+    );
+  });
+
+  renderTools(getVisibleTools());
+}
+
 function createToolCard(tool){
 
   const card =
-    document.createElement("button");
+    document.createElement("article");
 
   card.className = "tool-card";
+  card.dataset.tool = tool.id;
+  card.setAttribute("role","button");
+  card.setAttribute("tabindex","0");
 
   const active =
     state.favorites.includes(tool.id);
@@ -422,6 +463,18 @@ function createToolCard(tool){
     }
 
     useTool(tool);
+  });
+
+  card.addEventListener("keydown", e => {
+
+    if(
+      !e.target.closest("[data-fav]") &&
+      (e.key === "Enter" || e.key === " ")
+    ){
+
+      e.preventDefault();
+      useTool(tool);
+    }
   });
 
   const fav =
@@ -507,9 +560,7 @@ function toggleFavorite(id){
 
   saveState();
 
-  renderTools(
-    filterTools($("#searchInput").value)
-  );
+  renderTools(getVisibleTools());
 
   renderRecent();
 }
@@ -561,7 +612,7 @@ document.addEventListener(
 
       e.preventDefault();
 
-      $("#searchInput").focus();
+      $("#commandSearch")?.click();
     }
 
     if(e.key === "Escape"){
@@ -575,7 +626,7 @@ document.addEventListener(
    RANDOM TOOL
    ========================= */
 
-$("#randomBtn").addEventListener(
+$("#randomBtn")?.addEventListener(
   "click",
   () => {
 
@@ -2498,18 +2549,26 @@ function applySettings(){
     state.lowfx
   );
 
-  $("#themeBtn").textContent =
-    state.theme === "light"
-      ? "☾"
-      : "☼";
+  const themeBtn = $("#themeBtn");
+  const fxBtn = $("#fxBtn");
 
-  $("#fxBtn").textContent =
-    state.lowfx
-      ? "○"
-      : "✦";
+  if(themeBtn){
+    themeBtn.textContent =
+      state.theme === "light"
+        ? "☾"
+        : "☼";
+  }
+
+  if(fxBtn){
+    fxBtn.textContent =
+      state.lowfx
+        ? "○"
+        : "✦";
+  }
 }
 
-$("#themeBtn").onclick =
+$("#themeBtn")?.addEventListener(
+  "click",
   () => {
 
     state.theme =
@@ -2519,9 +2578,11 @@ $("#themeBtn").onclick =
 
     saveState();
     applySettings();
-  };
+  }
+);
 
-$("#fxBtn").onclick =
+$("#fxBtn")?.addEventListener(
+  "click",
   () => {
 
     state.lowfx =
@@ -2535,7 +2596,8 @@ $("#fxBtn").onclick =
         ? "低特效模式已开启"
         : "低特效模式已关闭"
     );
-  };
+  }
+);
 
 /* =========================
    TOAST
@@ -2570,13 +2632,19 @@ function init(){
 
   applySettings();
 
-  renderTools();
+  renderTools(getVisibleTools());
 
   renderRecent();
 
   updateDashboard();
 
   renderChallenge();
+
+  $(".filter-chip").forEach(btn => {
+    btn.onclick = () => {
+      applyToolFilter(btn.dataset.filter);
+    };
+  });
 }
 
 init();
