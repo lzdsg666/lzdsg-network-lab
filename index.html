@@ -3,234 +3,120 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#080c18">
-  <meta name="description" content="LZDSG Network Lab V3">
-  <title>LZDSG Network Lab V3</title>
+  <meta name="theme-color" content="#070a12">
+  <meta name="description" content="LZDSG Network Lab V4 — personal network tool laboratory">
+  <title>LZDSG Network Lab V4</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+<div class="noise"></div>
+<div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
 <header class="topbar">
-  <a class="brand" href="#home">
-    <span class="brand-mark">L</span>
-    <span>
-      LZDSG <b>NETWORK LAB</b>
-      <small>V3</small>
-    </span>
-  </a>
-
-  <nav>
-    <a href="#home">首页</a>
-    <a href="#tools">工具</a>
-    <a href="#play">Playground</a>
-    <a href="#about">关于</a>
-  </nav>
-
-  <div class="top-actions">
-    <button id="themeBtn" class="icon-btn" title="切换主题">☼</button>
-    <button id="fxBtn" class="icon-btn" title="低特效模式">✦</button>
-  </div>
+  <a class="brand" href="#home"><span class="brand-mark">L</span><span class="brand-copy">LZDSG <b>NETWORK LAB</b><small>V4 / LAB CORE</small></span></a>
+  <nav><a href="#home">首页</a><a href="#tools">工具</a><a href="#play">Playground</a><a href="#about">关于</a></nav>
+  <div class="top-actions"><button id="themeBtn" class="icon-btn" title="切换主题">☼</button><button id="fxBtn" class="icon-btn" title="低特效模式">✦</button><button class="icon-btn command-trigger" title="命令面板">⌘</button></div>
 </header>
 
 <main id="home">
-
 <section class="hero container">
   <div class="hero-copy">
-    <div class="eyebrow">PERSONAL TOOL LAB · V3</div>
-
-    <h1>
-      把网络工具<br>
-      <span>做得更好玩。</span>
-    </h1>
-
-    <p>
-      轻量、实用、可玩。
-      网络检测、开发工具、实用工具和小游戏集中在一个实验室里。
-    </p>
-
-    <div class="hero-actions">
-      <button id="randomBtn" class="btn primary">🎲 随机玩一个</button>
-      <a class="btn ghost" href="#tools">浏览工具</a>
-    </div>
+    <div class="eyebrow"><span class="pulse-dot"></span> PERSONAL NETWORK TOOL LAB · V4</div>
+    <h1>把工具箱，<br><em>变成实验室。</em></h1>
+    <p>网络检测、开发工具、实用工具与小游戏，被重新组织成一个更快、更顺手、更有反馈感的个人实验台。</p>
+    <div class="hero-actions"><button id="randomBtn" class="btn primary">⌁ 随机实验</button><a class="btn ghost" href="#tools">进入工具区 <span>↘</span></a></div>
+    <div class="hero-meta"><span>LOCAL-FIRST</span><i></i><span>18 TOOLS</span><i></i><span>4 GAMES</span></div>
   </div>
-
-  <div class="hero-panel">
-    <div class="panel-head">
-      <span>LAB STATUS</span>
-      <i></i>
-      <b>ONLINE</b>
+  <div class="hero-console">
+    <div class="console-top"><span><i></i> LAB CORE</span><b>ONLINE</b></div>
+    <div class="orb"><div class="orb-ring r1"></div><div class="orb-ring r2"></div><div class="orb-core">L</div></div>
+    <div class="telemetry">
+      <div><span>LOCAL TIME</span><strong id="labClock">--:--:--</strong></div>
+      <div><span>SESSION</span><strong id="sessionStatus">ACTIVE</strong></div>
+      <div><span>VIEWPORT</span><strong id="viewportStatus">--</strong></div>
     </div>
-
-    <div class="terminal">
-      <div>$ lzdsg --status</div>
-      <div class="ok">✓ tools loaded</div>
-      <div class="ok">✓ local save enabled</div>
-      <div class="muted">→ progress stored locally</div>
-      <div class="cursor">_</div>
-    </div>
+    <div class="terminal"><span>$ lzdsg --status</span><b>✓ visual core online</b><b>✓ local storage ready</b><small>→ waiting for your next experiment_</small></div>
   </div>
 </section>
 
-<section class="container quick">
-  <div class="search-box">
-    <span>⌕</span>
-    <input
-      id="searchInput"
-      placeholder="搜索工具，例如 JSON、IP、Base64…"
-    >
-    <kbd>Ctrl K</kbd>
-  </div>
-
-  <div class="challenge" id="challengeCard"></div>
+<section class="container command-strip">
+  <button class="search-box" id="commandSearch"><span>⌕</span><strong>搜索工具 / 打开命令</strong><small>JSON、IP、Base64、DNS…</small><kbd>Ctrl K</kbd></button>
+  <div class="live-badge"><span></span> ALL SYSTEMS NORMAL</div>
 </section>
 
 <section class="container dashboard">
-
-  <article class="dash-card level-card">
-    <div class="dash-label">LAB LEVEL</div>
-
-    <div class="level-line">
-      <strong id="level">1</strong>
-      <span id="xpText">0 / 100 XP</span>
-    </div>
-
-    <div class="progress">
-      <i id="xpBar"></i>
-    </div>
-
-    <p id="levelHint">使用工具获得 XP</p>
-  </article>
-
-  <article class="dash-card">
-    <div class="dash-label">TODAY</div>
-    <strong id="todayText">0 次操作</strong>
-    <p>今天继续探索实验室</p>
-  </article>
-
-  <article class="dash-card">
-    <div class="dash-label">STATS</div>
-    <strong><span id="toolCount">0</span> 工具</strong>
-    <p>
-      <span id="favCount">0</span> 个收藏 ·
-      <span id="achievementCount">0</span> 成就
-    </p>
-  </article>
-
+  <article class="dash-card level-card"><div class="dash-label">LAB LEVEL <span>PROGRESS</span></div><div class="level-line"><strong id="level">1</strong><span id="xpText">0 / 100 XP</span></div><div class="progress"><i id="xpBar"></i></div><p id="levelHint">使用工具获得 XP</p></article>
+  <article class="dash-card stat-card"><div class="dash-label">TODAY</div><strong id="todayText">0 次操作</strong><p>今天继续探索实验室</p><div class="mini-signal"></div></article>
+  <article class="dash-card stat-card"><div class="dash-label">COLLECTION</div><strong><span id="toolCount">0</span> TOOLS</strong><p><span id="favCount">0</span> 收藏 · <span id="achievementCount">0</span> 成就</p><div class="mini-bars"><i></i><i></i><i></i><i></i><i></i></div></article>
 </section>
 
 <section id="tools" class="container section">
-
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">TOOLBOX</div>
-      <h2>工具箱</h2>
-    </div>
-
-    <span id="resultCount"></span>
-  </div>
-
+  <div class="section-head"><div><div class="eyebrow">01 / TOOL REGISTRY</div><h2>工具实验室</h2><p>选择一个模块，马上开始实验。</p></div><span id="resultCount"></span></div>
+  <div class="tool-controls"><div class="filter-label">FILTER <span>ALL MODULES</span></div><button class="filter-chip active" data-filter="all">全部</button><button class="filter-chip" data-filter="network">网络</button><button class="filter-chip" data-filter="dev">开发</button><button class="filter-chip" data-filter="utility">实用</button><button class="filter-chip" data-filter="favorite">★ 收藏</button></div>
   <div id="toolSections"></div>
-
 </section>
 
-<section class="container section">
-
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">MEMORY</div>
-      <h2>最近使用</h2>
-    </div>
-  </div>
-
+<section class="container section recent-section">
+  <div class="section-head"><div><div class="eyebrow">02 / MEMORY</div><h2>最近实验</h2></div><span>LOCAL HISTORY</span></div>
   <div id="recentTools" class="tool-grid compact"></div>
-
 </section>
 
-<section id="play" class="container section">
-
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">PLAYGROUND</div>
-      <h2>玩点东西</h2>
-    </div>
-
-    <span>小游戏也能获得 XP</span>
-  </div>
-
+<section id="play" class="container section playground-section">
+  <div class="section-head"><div><div class="eyebrow">03 / PLAYGROUND</div><h2>实验场</h2><p>换个方式测试反应、速度和网络知识。</p></div><span>XP ENABLED</span></div>
   <div class="game-grid">
-
-    <button class="game-card" data-game="reaction">
-      <b>⚡ 反应力</b>
-      <span>看准时机点击</span>
-    </button>
-
-    <button class="game-card" data-game="typing">
-      <b>⌨️ 打字挑战</b>
-      <span>尽快输入目标文本</span>
-    </button>
-
-    <button class="game-card" data-game="color">
-      <b>🎨 颜色猎人</b>
-      <span>找到指定颜色</span>
-    </button>
-
-    <button class="game-card" data-game="quiz">
-      <b>🌐 网络问答</b>
-      <span>测试你的网络知识</span>
-    </button>
-
+    <button class="game-card featured" data-game="reaction"><span class="game-index">01</span><b>反应力</b><span>等待信号，精准点击</span><i>↗</i></button>
+    <button class="game-card" data-game="typing"><span class="game-index">02</span><b>打字挑战</b><span>输入目标文本并计时</span><i>↗</i></button>
+    <button class="game-card" data-game="color"><span class="game-index">03</span><b>颜色猎人</b><span>从干扰项中找出目标</span><i>↗</i></button>
+    <button class="game-card" data-game="quiz"><span class="game-index">04</span><b>网络问答</b><span>测试你的基础网络知识</span><i>↗</i></button>
   </div>
-
+  <div id="challengeCard" class="challenge"></div>
 </section>
 
 <section id="about" class="container section about">
-
-  <div>
-    <div class="eyebrow">ABOUT</div>
-    <h2>LZDSG Network Lab</h2>
-  </div>
-
-  <p>
-    一个纯前端个人实验室。
-    工具尽量直接在浏览器运行，收藏、历史、等级和设置保存在本地，
-    不需要注册账号。
-  </p>
-
+  <div class="about-title"><div class="eyebrow">04 / ABOUT</div><h2>一个属于你的<br><em>网络实验室。</em></h2></div>
+  <div class="about-copy"><p>这是一个纯前端个人实验室。工具尽量直接在浏览器运行，收藏、历史、等级和设置保存在本地，不需要注册账号。</p><div class="about-grid"><div><b>LOCAL</b><span>数据优先留在设备</span></div><div><b>FAST</b><span>轻量，无后端依赖</span></div><div><b>FX</b><span>可切换低特效模式</span></div><div><b>READY</b><span>手机与桌面适配</span></div></div></div>
 </section>
-
 </main>
 
-<footer class="container footer">
-  <span>LZDSG NETWORK LAB · V3</span>
-  <span>Built for experimenting.</span>
-</footer>
+<footer class="container footer"><span><b>LZDSG</b> NETWORK LAB / V4</span><span>Built for experimenting.</span><a href="#home">BACK TO TOP ↑</a></footer>
 
-<div id="modal" class="modal" aria-hidden="true">
-
-  <div class="modal-backdrop" data-close></div>
-
-  <section class="modal-card">
-
-    <div class="modal-head">
-
-      <div>
-        <div class="eyebrow" id="modalCategory"></div>
-        <h2 id="modalTitle"></h2>
-      </div>
-
-      <button class="close" data-close>×</button>
-
-    </div>
-
-    <div id="modalBody"></div>
-
-  </section>
-
-</div>
-
+<div id="modal" class="modal" aria-hidden="true"><div class="modal-backdrop" data-close></div><section class="modal-card"><div class="modal-head"><div><div class="eyebrow" id="modalCategory"></div><h2 id="modalTitle"></h2></div><button class="close" data-close>×</button></div><div id="modalBody"></div></section></div>
 <div id="toast" class="toast"></div>
 
-<script src="app.js"></script>
+<div id="commandPalette" class="palette" aria-hidden="true">
+  <div class="palette-backdrop" data-palette-close></div>
+  <div class="palette-card">
+    <div class="palette-head"><span>⌘ COMMAND</span><kbd>ESC</kbd></div>
+    <input id="paletteInput" autocomplete="off" placeholder="搜索工具、功能…">
+    <div id="paletteResults"></div>
+    <div class="palette-foot"><span>↑↓ 选择</span><span>ENTER 打开</span></div>
+  </div>
+</div>
 
+<script src="app.js"></script>
+<script>
+(function(){
+  const clock=document.getElementById('labClock'), vp=document.getElementById('viewportStatus');
+  function tick(){ if(clock) clock.textContent=new Date().toLocaleTimeString('zh-CN',{hour12:false}); if(vp) vp.textContent=innerWidth+' × '+innerHeight; }
+  tick(); setInterval(tick,1000);
+  const palette=document.getElementById('commandPalette'), input=document.getElementById('paletteInput'), results=document.getElementById('paletteResults');
+  const open=()=>{palette.classList.add('show');palette.setAttribute('aria-hidden','false');setTimeout(()=>input.focus(),30);render('');};
+  const close=()=>{palette.classList.remove('show');palette.setAttribute('aria-hidden','true');};
+  const render=(q)=>{
+    const cards=[...document.querySelectorAll('#toolSections .tool-card')];
+    const needle=(q||'').trim().toLowerCase();
+    const hit=cards.filter(x=>!needle||x.textContent.toLowerCase().includes(needle)).slice(0,8);
+    results.innerHTML=hit.length?hit.map((x,i)=>'<button class="palette-item" data-target="'+(x.dataset.tool||'')+'"><span class="palette-num">'+String(i+1).padStart(2,'0')+'</span><span>'+x.textContent.replace(/★/g,'').trim().slice(0,70)+'</span><b>↵</b></button>').join(''):'<div class="palette-empty">没有找到匹配工具</div>';
+    results.querySelectorAll('.palette-item').forEach((b,i)=>b.onclick=()=>{const t=hit[i];close();if(t)t.click();});
+  };
+  document.querySelector('.command-trigger')?.addEventListener('click',open);
+  document.getElementById('commandSearch')?.addEventListener('click',open);
+  document.querySelectorAll('[data-palette-close]').forEach(x=>x.addEventListener('click',close));
+  input?.addEventListener('input',()=>render(input.value));
+  document.addEventListener('keydown',e=>{
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();open();}
+    if(e.key==='Escape') close();
+  });
+})();
+</script>
 </body>
 </html>
