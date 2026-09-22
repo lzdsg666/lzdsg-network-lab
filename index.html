@@ -118,5 +118,19 @@
   });
 })();
 </script>
-</body>
+<script>
+(function(){
+  document.querySelectorAll('.filter-chip').forEach(btn=>btn.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-chip').forEach(x=>x.classList.remove('active'));
+    btn.classList.add('active');
+    const mode=btn.dataset.filter;
+    let list=tools;
+    if(mode==='network') list=tools.filter(t=>t.category==='网络');
+    if(mode==='dev') list=tools.filter(t=>t.category==='开发');
+    if(mode==='utility') list=tools.filter(t=>t.category==='实用');
+    if(mode==='favorite') list=tools.filter(t=>state.favorites.includes(t.id));
+    renderTools(list);
+  }));
+})();
+</script></body>
 </html>
