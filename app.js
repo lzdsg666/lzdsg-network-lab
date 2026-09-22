@@ -540,16 +540,15 @@ function filterTools(query){
   );
 }
 
-$("#searchInput").addEventListener(
-  "input",
-  e => {
-
-    renderTools(
-      filterTools(e.target.value)
-    );
-
-  }
-);
+const searchInput = $("#searchInput");
+if(searchInput){
+  searchInput.addEventListener(
+    "input",
+    e => {
+      renderTools(filterTools(e.target.value));
+    }
+  );
+}
 
 document.addEventListener(
   "keydown",
@@ -615,12 +614,11 @@ function closeModal(){
   );
 }
 
-$$("[data-close]").forEach(
-  el => el.addEventListener(
-    "click",
-    closeModal
-  )
-);
+document.addEventListener("click", e => {
+  if(e.target.closest("[data-close]")){
+    closeModal();
+  }
+});
 
 /* =========================
    IP
