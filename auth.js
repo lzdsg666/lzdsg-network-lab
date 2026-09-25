@@ -159,6 +159,7 @@ const renderPanel = (message = '登录后可在 LZDSG 项目间共享账号状�
     error.hidden = true;
     const data = new FormData(form);
     const registering = authMode === 'register';
+    let credentialsAccepted = false;
     const body = {
       email: String(data.get('email') || '').trim(),
       password: String(data.get('password') || '')
@@ -166,11 +167,14 @@ const renderPanel = (message = '登录后可在 LZDSG 项目间共享账号状�
     if (registering) body.username = String(data.get('username') || '').trim();
     try {
       await request(`/api/v1/auth/${registering ? 'register' : 'login'}`, { method: 'POST', body });
+      credentialsAccepted = true;
       const result = await request('/api/v1/auth/me');
       setUser(result.user);
       renderPanel(registering ? '账号已创建并登录。' : '登录成功。');
     } catch (failure) {
-      error.textContent = safeMessage(failure);
+      error.textContent = credentialsAccepted && failure instanceof AuthError && failure.status === 401
+        ? '账号认证成功，但浏览器未保存共享登录状态。请检查 Cookie 设置后重试。'
+        : safeMessage(failure);
       error.hidden = false;
       submit.disabled = false;
     } finally {
