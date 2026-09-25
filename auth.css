@@ -1,0 +1,17 @@
+.account-trigger { width:auto; min-width:42px; max-width:110px; padding:0 9px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:10px; }
+.account-status { margin:0 0 14px; color:var(--muted); }
+.account-identity { margin:0 0 14px; padding:13px; border:1px solid var(--line); border-radius:12px; color:var(--soft); }
+.account-identity strong,.account-identity span { display:block; overflow-wrap:anywhere; }
+.account-identity span { margin-top:3px; color:var(--muted); font-size:12px; }
+.account-tabs { display:flex; gap:8px; margin-bottom:12px; }
+.account-tabs button,.account-submit,.account-logout { border:1px solid var(--line2); border-radius:10px; padding:9px 13px; background:rgba(255,255,255,.04); color:var(--soft); cursor:pointer; }
+.account-tabs button[aria-pressed="true"],.account-submit { border-color:transparent; background:linear-gradient(110deg,#718eff,#65d9ff); color:#08101c; font-weight:700; }
+.account-form { display:grid; gap:10px; }
+.account-form label { display:grid; gap:5px; color:var(--muted); font-size:11px; }
+.account-form input { width:100%; border:1px solid var(--line); border-radius:10px; background:#080d18; color:var(--text); padding:11px 12px; font:inherit; }
+.account-form input:focus-visible,.account-tabs button:focus-visible,.account-submit:focus-visible,.account-logout:focus-visible,.account-trigger:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.account-error { margin:0; color:var(--danger); }
+.account-submit:disabled,.account-logout:disabled { opacity:.6; cursor:wait; }
+.account-logout { margin-top:12px; }
+.light .account-form input { background:#f5f7fb; color:#1b2638; }
+@media(max-width:620px) { .account-trigger { max-width:74px; padding:0 6px; } }

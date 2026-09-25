@@ -7,6 +7,7 @@
   <meta name="description" content="LZDSG Network Lab V4 — personal network tool laboratory">
   <title>LZDSG Network Lab V4</title>
   <link rel="stylesheet" href="style.css?v=4.0.2">
+  <link rel="stylesheet" href="auth.css?v=1">
 </head>
 <body>
 <div class="noise"></div>
@@ -14,7 +15,7 @@
 <header class="topbar">
   <a class="brand" href="#home"><span class="brand-mark">L</span><span class="brand-copy">LZDSG <b>NETWORK LAB</b><small>V4 / LAB CORE</small></span></a>
   <nav><a href="#home">首页</a><a href="#tools">工具</a><a href="#play">Playground</a><a href="#about">关于</a></nav>
-  <div class="top-actions"><button id="themeBtn" class="icon-btn" title="切换主题">☼</button><button id="fxBtn" class="icon-btn" title="低特效模式">✦</button><button class="icon-btn command-trigger" title="命令面板">⌘</button></div>
+  <div class="top-actions"><button id="accountBtn" class="icon-btn account-trigger" type="button" aria-label="LZDSG 统一账号">账号</button><button id="themeBtn" class="icon-btn" title="切换主题">☼</button><button id="fxBtn" class="icon-btn" title="低特效模式">✦</button><button class="icon-btn command-trigger" title="命令面板">⌘</button></div>
 </header>
 
 <main id="home">
@@ -73,7 +74,7 @@
 
 <section id="about" class="container section about">
   <div class="about-title"><div class="eyebrow">04 / ABOUT</div><h2>一个属于你的<br><em>网络实验室。</em></h2></div>
-  <div class="about-copy"><p>这是一个纯前端个人实验室。工具尽量直接在浏览器运行，收藏、历史、等级和设置保存在本地，不需要注册账号。</p><div class="about-grid"><div><b>LOCAL</b><span>数据优先留在设备</span></div><div><b>FAST</b><span>轻量，无后端依赖</span></div><div><b>FX</b><span>可切换低特效模式</span></div><div><b>READY</b><span>手机与桌面适配</span></div></div></div>
+  <div class="about-copy"><p>这是一个纯前端个人实验室。工具无需登录即可使用；统一账号连接 LZDSG 项目身份，收藏、历史、等级和设置仍保存在本地。</p><div class="about-grid"><div><b>LOCAL</b><span>数据优先留在设备</span></div><div><b>FAST</b><span>轻量，无后端依赖</span></div><div><b>FX</b><span>可切换低特效模式</span></div><div><b>READY</b><span>手机与桌面适配</span></div></div></div>
 </section>
 </main>
 
@@ -93,6 +94,8 @@
 </div>
 
 <script src="app.js?v=4.0.2"></script>
+<script src="api-config.js?v=1"></script>
+<script type="module" src="auth.js?v=1"></script>
 <script>
 (function(){
   const clock=document.getElementById('labClock'), vp=document.getElementById('viewportStatus');
